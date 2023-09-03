@@ -20,13 +20,26 @@ Route::get('/', function () {
 
 
     // return view('welcome');
-    return view('index',[
+    return view('backend.index',[
         'users'=> DB::table('users')->take(5)->get(),
         // 'users'=> DB::connection('mysql')->table('users')->take(5)->get(),
         // 'users'=> User::take(5)->get(),
         'dbConnection'=> Cache::get('db-connection','mysql')
     ]);
-})->middleware(['auth', 'verified']);
+})->middleware(['auth','role:admin']);
+
+
+Route::get('/data_table', function () {
+
+
+    // return view('welcome');
+    return view('backend.user_role',[
+        'users'=> DB::table('users')->take(5)->get(),
+        // 'users'=> DB::connection('mysql')->table('users')->take(5)->get(),
+        // 'users'=> User::take(5)->get(),
+        'dbConnection'=> Cache::get('db-connection','mysql')
+    ]);
+})->middleware(['auth', 'verified'])->name('data_table');
 
 // Route::get('/dashboard', function () {
 //     return view('dashboard');

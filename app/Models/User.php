@@ -14,11 +14,24 @@ class User extends Authenticatable
 
     use HasApiTokens, HasFactory, Notifiable, HasRoles;
 
+     /**
+     * This is user guard for checking auth.
+     */
 
-    public function hasAnyRole($roles)
-    {
-        return $this->hasAnyRole($roles);
-    }
+    protected $table = 'bidyaan_central_panel.users';
+    
+
+    public $timestamps = true;
+
+    protected $guard_name = 'web';
+
+    protected $connection = 'mysql';
+   
+    // public function hasAnyRole($roles)
+    // {
+    //     return $this->hasAnyRole($roles);
+    // }
+
     /**
      * The attributes that are mass assignable.
      *

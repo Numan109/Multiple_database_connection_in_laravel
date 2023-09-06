@@ -1,4 +1,6 @@
 <?php
+
+use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\DB;
 use App\Models\User;
 use App\Http\Controllers\ProfileController;
@@ -16,30 +18,33 @@ use Illuminate\Support\Facades\Cache;
 |
 */
 
-Route::get('/', function () {
+// for crontab
+
+Route::get('insert_monthly_active_student', [DashboardController::class, 'insert_monthly_active_student'])->name('insert_monthly_active_student');
 
 
-    // return view('welcome');
-    return view('backend.index',[
-        'users'=> DB::table('users')->take(5)->get(),
-        // 'users'=> DB::connection('mysql')->table('users')->take(5)->get(),
-        // 'users'=> User::take(5)->get(),
-        'dbConnection'=> Cache::get('db-connection','mysql')
-    ]);
-})->middleware(['auth','role:admin']);
+// ---------------------------------------------------------------------
 
 
-Route::get('/data_table', function () {
+Route::middleware('auth')->group(function () {
+    Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+    // })->middleware(['auth','role:admin', 'verified']);
+
+    Route::get('/data_table', function () {
+        // return view('welcome');
+        return view('backend.user_role',[
+            'users'=> DB::table('users')->take(5)->get(),
+            // 'users'=> DB::connection('mysql')->table('users')->take(5)->get(),
+            // 'users'=> User::take(5)->get(),
+            'dbConnection'=> Cache::get('db-connection','mysql')
+        ]);
+    })->name('data_table');
+
+});
 
 
-    // return view('welcome');
-    return view('backend.user_role',[
-        'users'=> DB::table('users')->take(5)->get(),
-        // 'users'=> DB::connection('mysql')->table('users')->take(5)->get(),
-        // 'users'=> User::take(5)->get(),
-        'dbConnection'=> Cache::get('db-connection','mysql')
-    ]);
-})->middleware(['auth', 'verified'])->name('data_table');
+
+
 
 // Route::get('/dashboard', function () {
 //     return view('dashboard');
@@ -50,7 +55,7 @@ Route::get('/data_table', function () {
 
 
 Route::get('change-db-connection', function () {
-   Cache::put('db-connection', request('connection','mysql'));
+//    Cache::put('db-connection', request('connection','mysql'));
 });
 
 

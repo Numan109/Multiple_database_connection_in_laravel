@@ -1,39 +1,127 @@
     @extends('layouts.admin_master')
-    
+
     @section('main_content')
-        <div class="relative sm:flex sm:justify-center sm:items-center min-h-screen bg-dots-darker bg-center bg-gray-100 dark:bg-dots-lighter dark:bg-gray-900 selection:bg-red-500 selection:text-white">
 
-            <div class="max-w-7xl mx-auto p-6 lg:p-8">
+    <div class="row">
 
-                <div class="row  mt-5">
-                    <div class="col-md-12 justify-content-md-center">
-                        <h1 class="text-center"> Connected Database: {{$dbConnection}} </h1>
-                    </div>
-                    <div class="col-md-12 text-center">
-                        <button class="btn btn-success btn-sm" onclick="change_database(this.value)" value="mysql" id="change_connection"> Switch School 1</button>
-                        <button class="btn btn-success btn-sm"onclick="change_database(this.value)" value="school_1" id="change_connection"> Switch School 2</button>
-                        <button class="btn btn-success btn-sm"onclick="change_database(this.value)" value="school_2" id="change_connection"> Switch School 3</button>
-                    </div>
+        <div class="col-md-3" onclick="change_database('mysql')">
+            <div class="card">
+                <div class="card-body">
+                    All School
                 </div>
-                @foreach( $users as $row=>$values)
-                <div class="row justify-content-md-center">
-                    <div class="col-md-6 bg-primary mt-5 ">
-                        <h1>{{$values->name}}</h1>
-                    </div>
+            </div>
+        </div>
+
+        <div class="col-md-3" onclick="change_database('school_1')">
+            <div class="card">
+                <div class="card-body">
+                    School 1
                 </div>
+            </div>
+        </div>
+        <div class="col-md-3" onclick="change_database('school_2')">
+            <div class="card">
+                <div class="card-body">
+                    School 2
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="row table-responsive">
+        <table class="table table-bordered  table-hover">
+            <thead>
+                <tr>
+                    <th colspan="14" style="text-align: center;">All School Active Students - {{$year}}</th>
+
+                </tr>
+                <tr>
+                    <th>Sl</th>
+                    <th>School Name</th>
+                    @foreach($months as $row=>$month)
+                    <th>{{$month}}</th>
+                    @endforeach
+                </tr>
+            </thead>
+            <tbody>
+                @php
+                $sl=1;
+                $total=[];
+                @endphp
+
+                @foreach( $all_school_active_student as $name=>$values)
+
+                <tr>
+                    <td>{{$sl++}}</td>
+                    <td>{{$name}}</td>
+                    @foreach($months as $row=>$month)
+
+                    <td>
+                        @foreach( $values as $key=>$data)
+                        @if(($row+1) == $data->month)
+                        {{ $data->total }}
+
+                        @php $total[$data->month][]=$data->total; @endphp
+                        @endif
+                        @endforeach
+                    </td>
+
+                    @endforeach
+                </tr>
+
                 @endforeach
 
 
-            </div>
-        </div>
+            </tbody>
+
+
+            <tfoot>
+                <tr>
+                    <td colspan="2" style="text-align: center;">Total</td>
+
+                    @foreach($months as $row=>$month)
+                    <td>
+
+
+                        <?php $all_school_all_month_total_students = []; ?>
+
+                        @foreach($total as $key=>$val)
+
+                        <?php $all_school_all_month_total_students[$key] = array_sum($val) ?>
+
+                        @endforeach
+
+                        @foreach($all_school_all_month_total_students as $key=>$value)
+
+                        @if(($row+1) == $key)
+                        {{ $value }}
+                        @endif
+
+                        @endforeach
+
+                    </td>
+                    @endforeach
+                </tr>
+            </tfoot>
+        </table>
+
+
+    </div>
+
+
+
+
+
+
     @endsection
 
     @push('js')
     <script>
-        let currentConnection = "{{$dbConnection}}";
-      function change_database(name, id) {
+        function change_database(name, id) {
 
-        // console.log(name);
+            console.log(name);
             axios.get("/change-db-connection", {
                 params: {
                     // connection: (currentConnection === 'mysql' ? 'other' : 'mysql')
@@ -44,4 +132,3 @@
     </script>
 
     @endpush
-

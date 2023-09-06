@@ -90,17 +90,17 @@
         <div class="row" >
           <div class="col-md-12" >
             <div class="card" style="min-height: 650px; border-radius:3px;">
-              <div class="card-header">
+              <!-- <div class="card-header">
                 <h5 class="card-title">Monthly Recap Report</h5>   
-              </div>
+              </div> -->
               <!-- /.card-header -->
               <div class="card-body">
-                <div class="row">
+                <!-- <div class="row"> -->
 
                     @yield('main_content')
 
                 
-                </div>
+                <!-- </div> -->
                 <!-- /.row -->
               </div>
              

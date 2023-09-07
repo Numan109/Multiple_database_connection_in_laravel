@@ -13,6 +13,11 @@
   <link rel="stylesheet" href="{{asset('assets')}}/plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
   <!-- Theme style -->
   <link rel="stylesheet" href="{{asset('assets')}}/dist/css/adminlte.min.css">
+  <script src="{{asset('assets')}}/plugins/jquery/jquery.min.js"></script>
+   <!-- DataTables -->
+   <link rel="stylesheet" href="{{asset('assets')}}/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+  <link rel="stylesheet" href="{{asset('assets')}}/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+  <link rel="stylesheet" href="{{asset('assets')}}/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
 
   @stack('css')
 </head>
@@ -29,9 +34,11 @@
 <!-- REQUIRED SCRIPTS -->
 <!-- jQuery -->
 
+
+
 <script src="https://cdn.jsdelivr.net/npm/axios@1.5.0/dist/axios.min.js"></script>
 
-<script src="{{asset('assets')}}/plugins/jquery/jquery.min.js"></script>
+
 <!-- Bootstrap -->
 <script src="{{asset('assets')}}/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 <!-- overlayScrollbars -->
@@ -39,6 +46,50 @@
 <!-- AdminLTE App -->
 <script src="{{asset('assets')}}/dist/js/adminlte.js"></script>
 
+<!-- DataTables  & Plugins -->
+<script src="{{asset('assets')}}/plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="{{asset('assets')}}/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+<script src="{{asset('assets')}}/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+<script src="{{asset('assets')}}/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+<script src="{{asset('assets')}}/plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+<script src="{{asset('assets')}}/plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+<script src="{{asset('assets')}}/plugins/jszip/jszip.min.js"></script>
+<script src="{{asset('assets')}}/plugins/pdfmake/pdfmake.min.js"></script>
+<script src="{{asset('assets')}}/plugins/pdfmake/vfs_fonts.js"></script>
+<script src="{{asset('assets')}}/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+<script src="{{asset('assets')}}/plugins/datatables-buttons/js/buttons.print.min.js"></script>
+<script src="{{asset('assets')}}/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+
+
+<script>
+            //    Data table script 
+            $(document).ready (function () {
+                $("#datatable_1").DataTable({
+                    "responsive": true,
+                    "lengthChange": false, 
+                    "autoWidth": false,
+                    "bDestroy": false,
+                    // "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+                    "buttons": ["csv", "excel", "pdf", "print", ]
+
+                    }).buttons().container().appendTo('#datatable_1_wrapper .col-md-6:eq(0)');
+
+                    $('#datatable_2').DataTable({
+                    "paging": true,
+                    "lengthChange": false,
+                    "searching": true,
+                    "buttons": "",
+                    "ordering": true,
+                    "info": true,
+                    "bDestroy": false,
+                    "autoWidth": false,
+                    "responsive": true,
+                });
+            });
+            
+
+           
+        </script>
 <!-- PAGE PLUGINS -->
 <!-- jQuery Mapael -->
 <script src="{{asset('assets')}}/plugins/jquery-mousewheel/jquery.mousewheel.js"></script>
@@ -52,6 +103,8 @@
 <script src="{{asset('assets')}}/dist/js/demo.js"></script>
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
 <script src="{{asset('assets')}}/dist/js/pages/dashboard2.js"></script>
+
+
 
 @stack('js')
 

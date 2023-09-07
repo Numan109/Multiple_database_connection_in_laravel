@@ -35,7 +35,7 @@ class DashboardController extends Controller
             $year = date('Y');
 
             $school_info = DB::table('school_info')->where('status', 1)->get();
-
+            
             $users = [];
 
             foreach ($school_info as $row => $value) {
@@ -55,13 +55,14 @@ class DashboardController extends Controller
                 if (!$already_inserted && empty($already_inserted)) {
 
                     $insert =  DB::table('monthly_active_students')->insert($data);
+                 
                 }
             }
 
             if($insert){
                 flash()->addSuccess('Insert success.');
              }else{
-                flash()->addError('Insert fail.');
+                flash()->addError('Already Inserted.');
              }
             return redirect()->route('dashboard');
 
@@ -73,15 +74,22 @@ class DashboardController extends Controller
         }
     }
 
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
 
+        // echo "<pre>";
+        // print_r($this->roleWisePermissionList());
+        // exit();
+
         if (is_null($this->user) || !$this->user->can('dashboard.view')) {
             abort(403, 'Sorry !! You are Unauthorized to view any dashboard !');
         }
+
+
         $year = date('Y');
         $months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
         $school_info = DB::table('school_info')->where('status', 1)->get();
@@ -105,6 +113,22 @@ class DashboardController extends Controller
         // echo"<pre>"; print_r($active_student); exit;
         return view('backend.index', compact('all_school_active_student', 'school_info', 'months', 'active_student', 'year'));
     }
+
+
+    public function roleWisePermissionList()
+    {
+        $id = Auth::user()->id;
+        $roleWisePermissionList = DB::table('model_has_roles')
+        ->join('role_has_permissions','model_has_roles.role_id','=','role_has_permissions.role_id')
+        ->join('permissions','role_has_permissions.permission_id','=','permissions.id')
+        ->select('permissions.name','permissions.id')
+        ->where('model_has_roles.model_id',$id)
+        ->get();
+
+        return response()->json(['roleWisePermissionList'=>$roleWisePermissionList],200);
+
+    }
+
 
     /**
      * Show the form for creating a new resource.

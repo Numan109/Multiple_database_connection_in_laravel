@@ -32,6 +32,31 @@
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-edit"></i>
               <p>
+               Administrator
+                <i class="fas fa-angle-left right"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="{{route('user_role')}}" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p> User Role</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{{asset('assets')}}/pages/forms/advanced.html" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Role Permission</p>
+                </a>
+              </li>
+             
+            </ul>
+          </li>
+
+          <li class="nav-item">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-edit"></i>
+              <p>
                 Forms
                 <i class="fas fa-angle-left right"></i>
               </p>

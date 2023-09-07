@@ -31,7 +31,7 @@
 
 
     <div class="row table-responsive">
-        <table class="table table-bordered  table-hover">
+        <table id="datatable_2" class="table table-bordered  table-hover">
             <thead>
                 <tr>
                     <th colspan="14" style="text-align: center;">All School Active Students - {{$year}}</th>

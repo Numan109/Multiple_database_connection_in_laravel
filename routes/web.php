@@ -4,6 +4,7 @@ use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\DB;
 use App\Models\User;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\RoleController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Cache;
 
@@ -27,11 +28,19 @@ Route::get('insert_monthly_active_student', [DashboardController::class, 'insert
 
 
 Route::middleware('auth')->group(function () {
+
+
+
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
-    // })->middleware(['auth','role:admin', 'verified']);
+
+    Route::get('user-role', [RoleController::class, 'index'])->name('user_role');
+
+
+
+
 
     Route::get('/data_table', function () {
-        // return view('welcome');
+      
         return view('backend.user_role',[
             'users'=> DB::table('users')->take(5)->get(),
             // 'users'=> DB::connection('mysql')->table('users')->take(5)->get(),

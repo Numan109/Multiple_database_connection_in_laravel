@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use DB;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Auth;
-use Spatie\Permission\Models\Permission;
-use DB;
-use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Database\QueryException;
+use Illuminate\Support\Facades\Session;
+use Spatie\Permission\Models\Permission;
 
 class DashboardController extends Controller
 {
@@ -31,6 +32,8 @@ class DashboardController extends Controller
     {
 
         try {
+
+        
             $month = date('m');
             $year = date('Y');
 
@@ -69,7 +72,7 @@ class DashboardController extends Controller
 
         } catch (QueryException $e) {
             return $e->getMessage();
-            //Session::flash("message",$e->getMessage());
+            // Session::flash("message",$e->getMessage());
             //    Session::flash("message", $e->errorInfo[2]);
         }
     }

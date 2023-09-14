@@ -35,6 +35,12 @@ Route::middleware('auth')->group(function () {
 
     Route::get('user-role', [RoleController::class, 'index'])->name('user_role');
 
+    Route::post('add-user-role', [RoleController::class, 'store'])->name('add_user_role');
+
+    Route::get('user-role-edit/{$id}', [RoleController::class, 'editRole'])->name('user_role_edit');
+
+    Route::get('user-role-delete/{$id}', [RoleController::class, 'destroy'])->name('user_role_delete');
+
 
 
 

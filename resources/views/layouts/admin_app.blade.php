@@ -18,6 +18,9 @@
    <link rel="stylesheet" href="{{asset('assets')}}/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
   <link rel="stylesheet" href="{{asset('assets')}}/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
   <link rel="stylesheet" href="{{asset('assets')}}/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+    <!-- custom css  -->
+  <link rel="stylesheet" href="{{asset('assets')}}/dist/css/custom.css">
+
 
   @stack('css')
 </head>
@@ -64,7 +67,7 @@
 <script>
             //    Data table script 
             $(document).ready (function () {
-                $("#datatable_1").DataTable({
+                $("#datatable_all").DataTable({
                     "responsive": true,
                     "lengthChange": false, 
                     "autoWidth": false,
@@ -72,14 +75,26 @@
                     // "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
                     "buttons": ["csv", "excel", "pdf", "print", ]
 
-                    }).buttons().container().appendTo('#datatable_1_wrapper .col-md-6:eq(0)');
+                }).buttons().container().appendTo('#datatable_all_wrapper .col-md-6:eq(0)');
 
-                    $('#datatable_2').DataTable({
+                $('#datatable_without_button').DataTable({
                     "paging": true,
                     "lengthChange": false,
                     "searching": true,
                     "buttons": "",
                     "ordering": true,
+                    "info": true,
+                    "bDestroy": false,
+                    "autoWidth": false,
+                    "responsive": true,
+                });
+
+                $('#datatable_only_search').DataTable({
+                    "paging": true,
+                    "lengthChange": false,
+                    "searching": true,
+                    "buttons": "",
+                    "ordering": false,
                     "info": true,
                     "bDestroy": false,
                     "autoWidth": false,

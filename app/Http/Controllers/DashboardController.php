@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use DB;
+
 use App\Models\User;
+use Exception;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Auth;
@@ -11,13 +12,14 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Session;
 use Spatie\Permission\Models\Permission;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Redirect;
 
 class DashboardController extends Controller
 {
 
     public $user;
-
-
     public function __construct()
     {
         $this->middleware(function ($request, $next) {
@@ -28,17 +30,38 @@ class DashboardController extends Controller
 
 
 
+
+    public function bidyaanLogin()
+    {
+        $username = 'viceprincipal';
+        $password = md5(123456);
+
+        try{
+                $users = DB::connection('school_1')->table('users')->where('username', $username)->where('password', $password)->first();
+
+                if($users){
+
+                    return redirect()->to('https://v2.bidyaan.com/Auth/loginFromCentralPanel?username=' . $username . '&password=' . $password);
+                }
+        
+
+        }catch(Exception $e){
+                return $e->getMessage();
+        }
+    }
+
+
     function insert_monthly_active_student()
     {
 
         try {
 
-        
+
             $month = date('m');
             $year = date('Y');
 
             $school_info = DB::table('school_info')->where('status', 1)->get();
-            
+
             $users = [];
 
             foreach ($school_info as $row => $value) {
@@ -53,45 +76,37 @@ class DashboardController extends Controller
                 $data['year'] =  $year;
                 $data['total'] =  $users[$value->id];
                 $data['status'] =  1;
+                $data['created_at'] =  date('Y-m-d H:s:i');
+                $data['created_by'] =  1;
                 $already_inserted = DB::table('monthly_active_students')->where('school_id', $value->id)->where('month', $month)->where('year', $year)->where('status', 1)->first();
-               
+
                 if (!$already_inserted && empty($already_inserted)) {
 
                     $insert =  DB::table('monthly_active_students')->insert($data);
-                 
                 }
             }
 
-            if($insert){
+            if ($insert) {
                 flash()->addSuccess('Insert success.');
-             }else{
+            } else {
                 flash()->addError('Already Inserted.');
-             }
+            }
             return redirect()->route('dashboard');
-
-
         } catch (QueryException $e) {
-            return $e->getMessage();
+            // return $e->getMessage();
             // Session::flash("message",$e->getMessage());
             //    Session::flash("message", $e->errorInfo[2]);
+            flash()->addError($e->errorInfo[2]);
         }
     }
 
 
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-
-        // echo "<pre>";
-        // print_r($this->roleWisePermissionList());
-        // exit();
 
         if (is_null($this->user) || !$this->user->can('dashboard.view')) {
             abort(403, 'Sorry !! You are Unauthorized to view any dashboard !');
         }
-
 
         $year = date('Y');
         $months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
@@ -105,15 +120,7 @@ class DashboardController extends Controller
             $users[$value->id] = DB::connection($value->database_name)->table('students')->where('status_type', 'regular')->count();
         }
 
-
-
-        // echo"<pre>"; print_r($year); exit;
-        // echo "<pre>";
-        // print_r($users);
-        // exit;
-        // echo"<pre>"; print_r($all_school_active_student); exit;
-        // echo"<pre>"; print_r($school_info); exit;
-        // echo"<pre>"; print_r($active_student); exit;
+// return $school_info;exit;
         return view('backend.index', compact('all_school_active_student', 'school_info', 'months', 'active_student', 'year'));
     }
 
@@ -122,14 +129,13 @@ class DashboardController extends Controller
     {
         $id = Auth::user()->id;
         $roleWisePermissionList = DB::table('model_has_roles')
-        ->join('role_has_permissions','model_has_roles.role_id','=','role_has_permissions.role_id')
-        ->join('permissions','role_has_permissions.permission_id','=','permissions.id')
-        ->select('permissions.name','permissions.id')
-        ->where('model_has_roles.model_id',$id)
-        ->get();
+            ->join('role_has_permissions', 'model_has_roles.role_id', '=', 'role_has_permissions.role_id')
+            ->join('permissions', 'role_has_permissions.permission_id', '=', 'permissions.id')
+            ->select('permissions.name', 'permissions.id')
+            ->where('model_has_roles.model_id', $id)
+            ->get();
 
-        return response()->json(['roleWisePermissionList'=>$roleWisePermissionList],200);
-
+        return response()->json(['roleWisePermissionList' => $roleWisePermissionList], 200);
     }
 
 
@@ -179,5 +185,14 @@ class DashboardController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+
+    public function change($id)
+    {
+
+
+        $data = 'http://v2.bidyaan.com/';
+        return view('backend.school_view', compact('data'));
     }
 }

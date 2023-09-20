@@ -1,12 +1,14 @@
 <?php
 
-use App\Http\Controllers\DashboardController;
-use Illuminate\Support\Facades\DB;
 use App\Models\User;
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\RoleController;
-use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Request;
+use App\Http\Controllers\RoleController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\InvoiceController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,6 +24,8 @@ use Illuminate\Support\Facades\Cache;
 // for crontab
 
 Route::get('insert_monthly_active_student', [DashboardController::class, 'insert_monthly_active_student'])->name('insert_monthly_active_student');
+Route::get('bidyaan-login', [DashboardController::class, 'bidyaanLogin'])->name('bidyaan-login');
+Route::get('bidyaan-login1', [DashboardController::class, 'change'])->name('bidyaan-login1');
 
 
 // ---------------------------------------------------------------------
@@ -37,9 +41,26 @@ Route::middleware('auth')->group(function () {
 
     Route::post('add-user-role', [RoleController::class, 'store'])->name('add_user_role');
 
-    Route::get('user-role-edit/{$id}', [RoleController::class, 'editRole'])->name('user_role_edit');
 
-    Route::get('user-role-delete/{$id}', [RoleController::class, 'destroy'])->name('user_role_delete');
+    Route::get('user-role-edit/{id}', [RoleController::class, 'editRole'])->name('user_role.edit');
+
+
+    Route::get('user-role-delete/{id}', [RoleController::class, 'destroy'])->name('user_role_delete');
+    
+
+    Route::get('/school/{id}', [DashboardController::class, 'change'])->name('school');
+
+
+    Route::get('invoice-list', [InvoiceController::class, 'index'])->name('invoice_view');
+
+    Route::get('invoice-create', [InvoiceController::class, 'create'])->name('generate_invoice');
+
+    Route::post('active-student-for-invoice', [InvoiceController::class, 'acticeStudentForInvoice'])->name('active_student_for_invoice');
+
+    Route::get('add-invoice', [InvoiceController::class, 'store'])->name('add_invoice'); 
+
+    Route::get('view-invoice/{id}', [InvoiceController::class, 'show'])->name('invoice.view');
+    Route::get('print-invoice/{id}', [InvoiceController::class, 'print'])->name('invoice.print');
 
 
 
@@ -58,9 +79,6 @@ Route::middleware('auth')->group(function () {
 });
 
 
-
-
-
 // Route::get('/dashboard', function () {
 //     return view('dashboard');
   
@@ -68,10 +86,12 @@ Route::middleware('auth')->group(function () {
 
 
 
+// Route::get('change-db-connection', function () {
 
-Route::get('change-db-connection', function () {
+   
 //    Cache::put('db-connection', request('connection','mysql'));
-});
+// });
+
 
 
 Route::middleware('auth')->group(function () {

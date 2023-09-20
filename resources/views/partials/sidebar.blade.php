@@ -57,6 +57,33 @@
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-edit"></i>
               <p>
+               Accounts
+                <i class="fas fa-angle-left right"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="{{route('invoice_view')}}" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Invoice</p>
+                </a>
+              </li>
+
+              <li class="nav-item">
+                <a href="{{route('generate_invoice')}}" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p> Create Invoice</p>
+                </a>
+              </li>
+              
+             
+            </ul>
+          </li>
+
+          <li class="nav-item">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-edit"></i>
+              <p>
                 Forms
                 <i class="fas fa-angle-left right"></i>
               </p>

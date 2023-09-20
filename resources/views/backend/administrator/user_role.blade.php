@@ -49,7 +49,7 @@
                     <td class="action_2"> 
 
                         @can('role.edit')
-                            <a href="{{url('user-role-edit') .'/'. $values->id}}" class="btn btn-success btn-sm">Edit</a>
+                            <a href="{{route('user_role.edit',$values->id)}}" class="btn btn-success btn-sm">Edit</a>
                         @endcan
 
                         @can('role.delete')
